@@ -45,9 +45,6 @@ export default function Favorites() {
             <Heart className="text-primary fill-primary" />
             <h1 className="text-xl font-heading font-bold">Koleksi Tersimpan</h1>
           </div>
-          <Button size="icon" className="rounded-full h-12 w-12" onClick={() => setShowCreate(true)}>
-            <Plus />
-          </Button>
         </div>
 
         <div className="rounded-2xl border border-dashed border-border/70 bg-card/80 p-6 text-center space-y-3 shadow-sm">

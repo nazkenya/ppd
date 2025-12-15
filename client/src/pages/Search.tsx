@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Search as SearchIcon, Filter, X, Star, MapPin } from 'lucide-react';
+import { Search as SearchIcon, Filter, X, Star, MapPin, ArrowLeft } from 'lucide-react';
 import MobileLayout from '@/components/MobileLayout';
 import { cafes } from '@/lib/mockData';
 import { Button } from '@/components/ui/button';
@@ -46,7 +46,15 @@ export default function SearchPage() {
     <MobileLayout>
       <div className="p-6 pb-24 min-h-screen">
         {/* Search Header */}
-        <div className="flex gap-3 mb-6 sticky top-0 bg-background/95 backdrop-blur-md py-2 z-10 -mx-6 px-6">
+        <div className="flex gap-3 items-center mb-6 sticky top-0 bg-background/95 backdrop-blur-md py-2 z-10 -mx-6 px-6">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-10 w-10 rounded-full"
+            onClick={() => setLocation('/home')}
+          >
+            <ArrowLeft size={20} />
+          </Button>
           <div className="relative flex-1">
             <SearchIcon className="absolute left-3 top-3 text-muted-foreground" size={20} />
             <input 
