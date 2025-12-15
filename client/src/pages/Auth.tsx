@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Eye, EyeOff, Coffee } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import MobileLayout from '@/components/MobileLayout';
 import { motion, AnimatePresence } from 'framer-motion';
+import AppLogo from '@assets/image_1765787723080.png';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,14 +23,13 @@ export default function Auth() {
 
   return (
     <MobileLayout hideNav>
-      <div className="flex flex-col h-full px-8 py-12 justify-center">
-        <div className="flex flex-col items-center mb-10">
-          <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mb-4 shadow-lg text-primary-foreground">
-             <Coffee size={40} strokeWidth={2.5} />
+      <div className="flex flex-col h-full px-8 py-12 justify-center space-y-8 bg-background">
+        <div className="flex flex-col items-center text-center space-y-3">
+          <div className="w-24 h-24 rounded-3xl flex items-center justify-center shadow-md border border-border/60 overflow-hidden">
+            <img src={AppLogo} alt="Fincaff" className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-4xl font-heading font-bold text-primary tracking-tight">FINCAFF</h1>
-          <p className="text-muted-foreground mt-2 text-center">
-            {isLogin ? 'Selamat datang kembali! Silakan masuk untuk melanjutkan.' : 'Buat akun untuk menemukan kopi favoritmu.'}
+          <p className="text-muted-foreground max-w-sm">
+            {isLogin ? 'Selamat datang kembali! Masuk untuk lanjut.' : 'Buat akun untuk menemukan kopi favoritmu.'}
           </p>
         </div>
 

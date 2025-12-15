@@ -23,7 +23,7 @@ export default function MobileLayout({ children, hideNav = false }: MobileLayout
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_20%_20%,hsl(var(--secondary)/0.6),transparent_35%),radial-gradient(circle_at_85%_10%,hsl(var(--accent)/0.4),transparent_30%),hsl(var(--background))] flex justify-center px-3 py-4">
       <div className="w-full max-w-md bg-background/95 backdrop-blur-xl min-h-[92vh] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.35)] relative flex flex-col overflow-hidden border border-border/70 rounded-3xl">
-        <header className="px-5 py-4 flex items-center justify-between border-b border-border/60">
+        <header className="px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="logo-mark">
               <img src={AppLogo} alt="Fincaff logo" />

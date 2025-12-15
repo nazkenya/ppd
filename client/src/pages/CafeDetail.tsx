@@ -11,6 +11,12 @@ import { Input } from '@/components/ui/input';
 import { useCollections } from '@/context/CollectionsContext';
 import { CollectionPicker } from '@/components/CollectionPicker';
 
+const priceRangeMap: Record<string, string> = {
+  '$': 'Rp 25k - 50k',
+  '$$': 'Rp 50k - 100k',
+  '$$$': 'Rp 100k - 200k',
+};
+
 export default function CafeDetail() {
   const [, params] = useRoute('/cafe/:id');
   const [, setLocation] = useLocation();
@@ -22,9 +28,11 @@ export default function CafeDetail() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const { collections, addCafeToCollection } = useCollections();
   const isSaved = collections.some((col) => col.cafeIds.includes(cafe?.id || ''));
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${cafe.lat},${cafe.lng}`;
 
   if (!cafe) return <div>Kafe tidak ditemukan</div>;
+
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${cafe.lat},${cafe.lng}`;
+  const priceRangeText = priceRangeMap[cafe.priceRange] ?? 'Rp 50k - 100k';
 
   return (
     <MobileLayout hideNav>
@@ -317,17 +325,19 @@ export default function CafeDetail() {
         </div>
 
         {/* Bottom Action Bar */}
-          <div className="sticky bottom-0 left-0 right-0 px-6 pb-5 pt-3 bg-card/95 backdrop-blur-md border-t border-border/80 z-30 flex gap-4 items-center shadow-[0_-12px_30px_rgba(0,0,0,0.08)]">
-          <div className="flex flex-col justify-center">
-          <span className="text-xs text-muted-foreground">Rentang Harga</span>
-            <span className="font-bold text-primary text-lg">{cafe.priceRange}</span>
+        <div className="sticky bottom-0 left-0 right-0 px-5 pb-5 pt-3 bg-card/95 backdrop-blur-md border-t border-border/70 z-30">
+          <div className="rounded-2xl border border-border/70 bg-background/90 px-4 py-3 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.25)] flex items-center gap-3">
+            <div className="flex-1">
+              <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground">Rentang harga</div>
+              <div className="text-lg font-bold text-foreground leading-tight">{priceRangeText}</div>
+              <div className="text-[11px] text-muted-foreground">Per orang</div>
+            </div>
+            <div className="flex gap-2 ml-auto">
+              <Button className="h-12 rounded-xl font-bold flex items-center gap-2" onClick={() => window.open(mapsUrl, '_blank')}>
+                <Navigation size={18} /> Rute
+              </Button>
+            </div>
           </div>
-          <Button className="h-12 rounded-xl font-bold flex items-center gap-2" onClick={() => window.open(mapsUrl, '_blank')}>
-            <Navigation size={18} /> Rute
-          </Button>
-          <Button className="flex-1 h-12 rounded-xl text-lg font-bold shadow-lg" onClick={() => setLocation('/order')}>
-            Pesan Sekarang
-          </Button>
         </div>
       </div>
 
