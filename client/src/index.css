@@ -50,78 +50,98 @@
 }
 
 :root {
-  /* Warm Coffee Theme */
-  --background: 35 30% 96%; /* Soft cream background */
-  --foreground: 20 10% 20%; /* Dark warm gray text */
+  /* Fincaff palette (teal + apricot + mint + cream) */
+  --background: 43 64% 96%; /* Cream base */
+  --foreground: 193 35% 18%; /* Deep teal text */
 
   --card: 0 0% 100%;
-  --card-foreground: 20 10% 20%;
+  --card-foreground: 193 35% 18%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 20 10% 20%;
+  --popover-foreground: 193 35% 18%;
 
-  --primary: 28 45% 45%; /* Coffee Brown */
-  --primary-foreground: 35 30% 96%;
+  --primary: 188 60% 32%; /* Teal pin */
+  --primary-foreground: 43 64% 96%;
 
-  --secondary: 35 30% 90%; /* Light beige for secondary actions */
-  --secondary-foreground: 28 45% 25%;
+  --secondary: 148 32% 88%; /* Mint wash for variety */
+  --secondary-foreground: 188 45% 22%;
 
-  --muted: 35 20% 92%;
-  --muted-foreground: 25 10% 45%;
+  --muted: 42 25% 88%; /* Sand */
+  --muted-foreground: 193 25% 35%;
 
-  --accent: 32 90% 55%; /* Warm Orange/Amber for highlights/stars */
-  --accent-foreground: 0 0% 100%;
+  --accent: 32 82% 58%; /* Apricot cup */
+  --accent-foreground: 0 0% 15%;
 
-  --destructive: 0 84% 60%;
+  --destructive: 8 70% 54%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 35 20% 85%;
-  --input: 35 20% 85%;
-  --ring: 28 45% 45%;
+  --border: 43 30% 85%;
+  --input: 43 30% 85%;
+  --ring: 188 60% 32%;
 
   --radius: 1rem;
 
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
+  --chart-1: 188 60% 42%;
+  --chart-2: 32 82% 58%;
+  --chart-3: 148 32% 48%;
+  --chart-4: 43 70% 56%;
+  --chart-5: 12 68% 55%;
+}
+
+/* Additional cafe-friendly tokens */
+:root {
+  --espresso: 24 37% 12%; /* deep brown */
+  --brown-1: 28 45% 20%; /* medium brown */
+  --caramel: 30 85% 62%; /* warm caramel */
+  --foam: 42 28% 95%; /* light cream */
+  --mint: 148 32% 88%;
+  --citrus: 45 85% 55%;
+
+  /* link a few semantic tokens to the new colors to keep things minimalistic but fun */
+  --primary: 24 45% 20%; /* espresso as primary accent */
+  --primary-foreground: 42 28% 95%;
+
+  --accent: 30 85% 62%; /* caramel */
+  --accent-foreground: 0 0% 12%;
+
+  --secondary: 148 32% 88%; /* mint for soft accents */
+  --secondary-foreground: 24 45% 20%;
 }
 
 .dark {
-  --background: 25 15% 12%; /* Dark warm background */
-  --foreground: 35 20% 90%;
+  --background: 196 35% 10%; /* Deep teal charcoal */
+  --foreground: 43 50% 92%;
 
-  --card: 25 15% 16%;
-  --card-foreground: 35 20% 90%;
+  --card: 196 30% 14%;
+  --card-foreground: 43 50% 92%;
 
-  --popover: 25 15% 16%;
-  --popover-foreground: 35 20% 90%;
+  --popover: 196 30% 14%;
+  --popover-foreground: 43 50% 92%;
 
-  --primary: 28 50% 55%; /* Lighter coffee for dark mode */
-  --primary-foreground: 25 15% 10%;
+  --primary: 32 82% 60%; /* Apricot pops on dark */
+  --primary-foreground: 196 35% 12%;
 
-  --secondary: 25 15% 22%;
-  --secondary-foreground: 35 20% 90%;
+  --secondary: 188 30% 20%; /* Muted teal-mint */
+  --secondary-foreground: 43 50% 90%;
 
-  --muted: 25 15% 22%;
-  --muted-foreground: 35 10% 65%;
+  --muted: 196 28% 20%;
+  --muted-foreground: 43 25% 70%;
 
-  --accent: 32 90% 55%;
-  --accent-foreground: 0 0% 100%;
+  --accent: 188 60% 55%; /* Teal accent for balance */
+  --accent-foreground: 196 35% 12%;
 
-  --destructive: 0 62% 30%;
+  --destructive: 6 65% 50%;
   --destructive-foreground: 0 0% 98%;
 
-  --border: 25 15% 22%;
-  --input: 25 15% 22%;
-  --ring: 28 50% 55%;
+  --border: 196 28% 24%;
+  --input: 196 28% 24%;
+  --ring: 32 82% 60%;
 
-  --chart-1: 220 70% 50%;
-  --chart-2: 160 60% 45%;
-  --chart-3: 30 80% 55%;
-  --chart-4: 280 65% 60%;
-  --chart-5: 340 75% 55%;
+  --chart-1: 32 82% 60%;
+  --chart-2: 188 60% 55%;
+  --chart-3: 148 32% 48%;
+  --chart-4: 43 70% 60%;
+  --chart-5: 12 68% 55%;
 }
 
 @layer base {
@@ -129,12 +149,56 @@
     @apply border-border;
   }
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased text-foreground;
+    background-color: hsl(var(--background));
+    /* playful, subtle coffee-themed soft blobs */
+    background-image:
+      radial-gradient(circle at 15% 18%, hsl(var(--accent) / 0.20), transparent 30%),
+      radial-gradient(circle at 82% 8%, hsl(var(--primary) / 0.06), transparent 35%),
+      radial-gradient(circle at 22% 82%, hsl(var(--secondary) / 0.10), transparent 30%);
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-bold;
   }
 }
+
+/* Primary coffee button style used by component variants */
+.btn-primary {
+  /* Solid, friendly primary button — no gradient for better accessibility */
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: 1px solid hsla(var(--primary), 0.12);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.98);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+/* Little logo mark used in header */
+.logo-mark {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: color-mix(in srgb, hsl(var(--secondary)) 65%, hsl(var(--background)) 35%);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  padding: 6px;
+}
+.logo-mark img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+
+/* subtle card warm background to make cafe photos pop */
+.card-warm { background: color-mix(in srgb, hsl(var(--foam)) 85%, transparent); }
+
+/* small utility for muted text using the theme variable */
+.text-muted { color: hsl(var(--muted-foreground)); }
 
 /* Custom scrollbar for horizontal lists */
 .no-scrollbar::-webkit-scrollbar {

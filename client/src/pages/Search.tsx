@@ -18,11 +18,23 @@ export default function SearchPage() {
   // Filter states
   const [facilities, setFacilities] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState([0, 100]); // Percentage
+  const [ambiance, setAmbiance] = useState<'Quiet' | 'Noisy' | ''>('');
+  const [openUntil, setOpenUntil] = useState<string>(''); // HH:MM
+  const [environment, setEnvironment] = useState<string>('');
 
-  const filteredCafes = cafes.filter(cafe => 
-    cafe.name.toLowerCase().includes(query.toLowerCase()) || 
-    cafe.address.toLowerCase().includes(query.toLowerCase())
-  );
+  const timeToMinutes = (t: string) => {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+  };
+
+  const filteredCafes = cafes.filter(cafe => {
+    const matchesQuery = cafe.name.toLowerCase().includes(query.toLowerCase()) || 
+      cafe.address.toLowerCase().includes(query.toLowerCase());
+    const matchesFacilities = facilities.length === 0 || facilities.every(f => cafe.facilities.includes(f));
+    const matchesAmbiance = !ambiance || cafe.ambiance === ambiance;
+    const matchesOpenUntil = !openUntil || timeToMinutes(cafe.closeTime) >= timeToMinutes(openUntil);
+    return matchesQuery && matchesFacilities && matchesAmbiance && matchesOpenUntil;
+  });
 
   const toggleFacility = (facility: string) => {
     setFacilities(prev => 
@@ -39,7 +51,7 @@ export default function SearchPage() {
             <SearchIcon className="absolute left-3 top-3 text-muted-foreground" size={20} />
             <input 
               type="text" 
-              placeholder="Search Cafe or Place..." 
+              placeholder="Cari kafe atau tempat..." 
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="w-full h-11 pl-10 pr-4 rounded-xl bg-white border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
@@ -57,7 +69,7 @@ export default function SearchPage() {
         </div>
 
         <div className="flex justify-between items-center mb-4">
-          <p className="text-sm text-muted-foreground">{filteredCafes.length} found</p>
+          <p className="text-sm text-muted-foreground">{filteredCafes.length} hasil</p>
         </div>
 
         {/* Results */}
@@ -84,85 +96,132 @@ export default function SearchPage() {
                     <Star size={14} fill="currentColor" /> {cafe.rating} <span className="text-muted-foreground font-normal">({cafe.reviewCount})</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
                   <MapPin size={12} /> {cafe.address}
                 </div>
-                <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center gap-2 text-[11px] text-muted-foreground mb-2">
+                  <span className="px-2 py-1 rounded-md bg-secondary text-secondary-foreground">
+                    {cafe.ambiance === 'Quiet' ? 'Quiet / Focus' : 'Lively / Social'}
+                  </span>
+                  <span className="px-2 py-1 rounded-md bg-muted text-muted-foreground">
+                    Parking: {cafe.parking || 'N/A'}
+                  </span>
+                </div>
+                <div className="text-[11px] text-muted-foreground mb-3">Seating: {cafe.seatingCapacity}</div>
+                <div className="flex items-center justify-between mt-2">
                   <div className="flex gap-2">
                     {cafe.facilities.slice(0, 3).map(fac => (
                       <span key={fac} className="text-[10px] bg-secondary text-secondary-foreground px-2 py-1 rounded-md">{fac}</span>
                     ))}
                   </div>
-                  <span className="text-xs font-medium text-primary cursor-pointer hover:underline">View Detail</span>
+                  <span className="text-xs font-medium text-primary cursor-pointer hover:underline">Lihat Detail</span>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Filter Drawer */}
         <AnimatePresence>
           {showFilters && (
-            <>
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.5 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-black z-40"
-                onClick={() => setShowFilters(false)}
-              />
-              <motion.div 
-                initial={{ y: '100%' }}
-                animate={{ y: 0 }}
-                exit={{ y: '100%' }}
-                transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="fixed bottom-0 left-0 right-0 bg-background z-50 rounded-t-3xl p-6 h-[80vh] overflow-y-auto"
-              >
+            <motion.div 
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed inset-0 z-50 flex items-end justify-center"
+            >
+              <div className="absolute inset-0 bg-black/50" onClick={() => setShowFilters(false)} />
+              <div className="relative w-full max-w-md bg-background rounded-t-3xl p-6 h-[80vh] overflow-y-auto shadow-2xl">
                 <div className="flex justify-between items-center mb-6 sticky top-0 bg-background pb-2 border-b border-border/50">
-                  <h2 className="text-xl font-heading font-bold">Filters</h2>
+                  <h2 className="text-xl font-heading font-bold">Filter</h2>
                   <Button variant="ghost" size="sm" onClick={() => setShowFilters(false)}>
                     <X size={24} />
                   </Button>
                 </div>
 
                 <div className="space-y-8">
-                  {/* Facilities */}
                   <div>
-                    <h3 className="font-bold mb-3">Facilities</h3>
-                    <div className="flex flex-wrap gap-2">
+                    <h3 className="font-bold mb-3">Fasilitas</h3>
+                    <div className="flex flex-wrap gap-3">
                       {['Wifi', 'Socket', 'Parking', 'Toilet', 'Prayer Room'].map(fac => (
-                        <div 
+                        <button 
                           key={fac}
                           onClick={() => toggleFacility(fac)}
                           className={cn(
-                            "px-4 py-2 rounded-xl text-sm font-medium border cursor-pointer transition-colors",
+                            "px-5 py-2 rounded-full text-sm font-semibold border border-border bg-white cursor-pointer transition-colors",
                             facilities.includes(fac) 
-                              ? "bg-primary text-primary-foreground border-primary" 
-                              : "bg-white text-muted-foreground border-border hover:bg-secondary"
+                              ? "border-primary text-primary bg-primary/5" 
+                              : "text-foreground hover:border-primary/60"
                           )}
                         >
                           {fac}
-                        </div>
+                        </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Environment */}
                   <div>
-                    <h3 className="font-bold mb-3">Environment</h3>
-                    <div className="space-y-3">
+                    <h3 className="font-bold mb-3">Lingkungan</h3>
+                    <div className="space-y-3 text-base">
                       {['Indoor', 'Indoor Smoking', 'Outdoor', 'Study Zone', 'Pet Friendly'].map(env => (
-                        <div key={env} className="flex items-center space-x-3">
-                          <Checkbox id={env} className="rounded-md" />
-                          <Label htmlFor={env} className="text-base font-normal cursor-pointer">{env}</Label>
-                        </div>
+                        <label key={env} className="flex items-center gap-3 cursor-pointer" onClick={() => setEnvironment(prev => prev === env ? '' : env)}>
+                          <span
+                            className={cn(
+                              "w-5 h-5 rounded-full border-2 border-border inline-flex items-center justify-center",
+                              environment === env && "border-primary"
+                            )}
+                          >
+                            {environment === env && <span className="w-2.5 h-2.5 rounded-full bg-primary block" />}
+                          </span>
+                          <span className="text-foreground">{env}</span>
+                        </label>
                       ))}
                     </div>
                   </div>
 
-                  {/* Price Range */}
                   <div>
-                    <h3 className="font-bold mb-4">Price Range</h3>
+                    <h3 className="font-bold mb-3">Suasana</h3>
+                    <div className="flex gap-2">
+                      {(['Quiet', 'Noisy'] as const).map(option => (
+                        <button
+                          key={option}
+                          onClick={() => setAmbiance(prev => prev === option ? '' : option)}
+                          className={cn(
+                            "px-5 py-2 rounded-full text-sm font-semibold border border-border bg-white transition-colors",
+                            ambiance === option 
+                              ? "border-primary text-primary bg-primary/5" 
+                              : "text-foreground hover:border-primary/60"
+                          )}
+                        >
+                          {option === 'Quiet' ? 'Tenang / Fokus' : 'Ramai / Sosial'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold mb-3">Buka sampai</h3>
+                    <div className="flex gap-2">
+                      {['20:00', '22:00', '24:00'].map(time => (
+                            <button
+                              key={time}
+                              onClick={() => setOpenUntil(prev => prev === time ? '' : time)}
+                              className={cn(
+                                "px-4 py-2 rounded-full text-sm font-semibold border transition-colors",
+                                openUntil === time 
+                                  ? "bg-primary text-primary-foreground border-primary" 
+                                  : "bg-white text-foreground border-border hover:bg-secondary/80"
+                              )}
+                            >
+                              {`Sampai ${time}`}
+                            </button>
+                          ))}
+                    </div>
+                    {openUntil && <p className="text-xs text-muted-foreground mt-2">Menampilkan kafe yang buka minimal sampai {openUntil}</p>}
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold mb-4">Rentang Harga</h3>
                     <Slider 
                       defaultValue={[0, 100]} 
                       max={100} 
@@ -178,12 +237,12 @@ export default function SearchPage() {
 
                   <div className="pt-4 pb-8">
                     <Button className="w-full h-12 rounded-xl text-lg font-bold shadow-lg" onClick={() => setShowFilters(false)}>
-                      Apply Filters
+                      Terapkan Filter
                     </Button>
                   </div>
                 </div>
-              </motion.div>
-            </>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

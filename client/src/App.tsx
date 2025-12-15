@@ -10,6 +10,7 @@ import CafeDetail from "@/pages/CafeDetail";
 import Favorites from "@/pages/Favorites";
 import Profile from "@/pages/Profile";
 import Order from "@/pages/Order";
+import { CollectionsProvider } from "./context/CollectionsContext";
 
 function Router() {
   return (
@@ -31,7 +32,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      <Router />
+      <CollectionsProvider>
+        <Router />
+      </CollectionsProvider>
     </QueryClientProvider>
   );
 }

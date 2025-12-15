@@ -28,11 +28,15 @@ export interface Cafe {
   reviewCount: number;
   distance: string;
   address: string;
+  ambiance: 'Quiet' | 'Noisy';
   isOpen: boolean;
   openTime: string;
   closeTime: string;
+  weeklyHours: Record<string, string>;
   phone: string;
   priceRange: string; 
+  parking: string;
+  seatingCapacity: string;
   images: string[];
   facilities: string[]; 
   tags: string[];
@@ -51,11 +55,23 @@ export const cafes: Cafe[] = [
     reviewCount: 324,
     distance: '3.2km',
     address: 'Jl. Merdeka No. 45, Jakarta',
+    ambiance: 'Quiet',
     isOpen: true,
     openTime: '07:00',
     closeTime: '22:00',
+    weeklyHours: {
+      Monday: '07:00 - 22:00',
+      Tuesday: '07:00 - 22:00',
+      Wednesday: '07:00 - 22:00',
+      Thursday: '07:00 - 22:00',
+      Friday: '07:00 - 23:00',
+      Saturday: '08:00 - 23:00',
+      Sunday: '08:00 - 21:00',
+    },
     phone: '+62 812-3456-7890',
     priceRange: '$$',
+    parking: 'Street & limited on-site',
+    seatingCapacity: 'Best for 2-6 people',
     images: [interior1, latte1, pastries, exterior],
     facilities: ['Wifi', 'Socket', 'Toilet', 'Prayer Room'],
     tags: ['Indoor', 'Study Zone', 'Cozy'],
@@ -79,11 +95,23 @@ export const cafes: Cafe[] = [
     reviewCount: 156,
     distance: '1.2km',
     address: 'Jl. Pahlawan No. 12, Jakarta',
+    ambiance: 'Noisy',
     isOpen: true,
     openTime: '08:00',
     closeTime: '23:00',
+    weeklyHours: {
+      Monday: '08:00 - 23:00',
+      Tuesday: '08:00 - 23:00',
+      Wednesday: '08:00 - 23:00',
+      Thursday: '08:00 - 23:00',
+      Friday: '08:00 - 00:00',
+      Saturday: '08:00 - 00:00',
+      Sunday: '08:00 - 22:00',
+    },
     phone: '+62 811-9876-5432',
     priceRange: '$$$',
+    parking: 'Valet & on-site',
+    seatingCapacity: 'Great for groups up to 10',
     images: [exterior, interior2, latte2],
     facilities: ['Wifi', 'Parking', 'Toilet', 'Outdoor'],
     tags: ['Outdoor', 'Pet Friendly', 'Nature'],
@@ -105,11 +133,23 @@ export const cafes: Cafe[] = [
     reviewCount: 89,
     distance: '4.5km',
     address: 'Jl. Sudirman Kav 5, Jakarta',
+    ambiance: 'Quiet',
     isOpen: false,
     openTime: '09:00',
     closeTime: '20:00',
+    weeklyHours: {
+      Monday: '09:00 - 20:00',
+      Tuesday: '09:00 - 20:00',
+      Wednesday: '09:00 - 20:00',
+      Thursday: '09:00 - 20:00',
+      Friday: '09:00 - 21:00',
+      Saturday: '09:00 - 21:00',
+      Sunday: 'Closed',
+    },
     phone: '+62 813-5555-1212',
     priceRange: '$',
+    parking: 'Street only',
+    seatingCapacity: 'Cozy, best for 1-3 people',
     images: [interior2, latte1],
     facilities: ['Wifi', 'Socket'],
     tags: ['Indoor', 'Quiet', 'Minimalist'],
@@ -129,11 +169,23 @@ export const cafes: Cafe[] = [
     reviewCount: 210,
     distance: '2.8km',
     address: 'Jl. Kemang Raya, Jakarta',
+    ambiance: 'Noisy',
     isOpen: true,
     openTime: '10:00',
     closeTime: '24:00',
+    weeklyHours: {
+      Monday: '10:00 - 23:00',
+      Tuesday: '10:00 - 23:00',
+      Wednesday: '10:00 - 23:00',
+      Thursday: '10:00 - 23:00',
+      Friday: '10:00 - 24:00',
+      Saturday: '10:00 - 24:00',
+      Sunday: '10:00 - 22:00',
+    },
     phone: '+62 812-9988-7766',
     priceRange: '$$',
+    parking: 'On-site lot',
+    seatingCapacity: 'Fits groups up to 8 comfortably',
     images: [interior1, pastries],
     facilities: ['Wifi', 'Toilet', 'Live Music'],
     tags: ['Indoor', 'Retro', 'Music'],

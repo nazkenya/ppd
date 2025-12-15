@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import { Heart, Plus, FolderPlus, Search, MapPin, Star } from 'lucide-react';
 import { useLocation } from 'wouter';
-import { Search, MapPin, Star, Heart } from 'lucide-react';
 import MobileLayout from '@/components/MobileLayout';
-import { cafes } from '@/lib/mockData';
 import { motion } from 'framer-motion';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useCollections } from '@/context/CollectionsContext';
+import { CollectionPicker } from '@/components/CollectionPicker';
+import { cafes } from '@/lib/mockData';
 
 export default function Favorites() {
   const [, setLocation] = useLocation();
-  // Mock favorites - just take the first two
-  const favoriteCafes = cafes.slice(0, 2);
+  const { collections, createCollection } = useCollections();
+  const [showCreate, setShowCreate] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
+  const totalSaved = collections.reduce((sum, col) => sum + col.cafeIds.length, 0);
+
+  const handleCreate = () => {
+    const created = createCollection(newName);
+    if (created) {
+      setShowCreate(false);
+      setNewName('');
+    }
+  };
+
+  const selectedCollection = useMemo(
+    () => collections.find((c) => c.id === selectedCollectionId) || null,
+    [collections, selectedCollectionId]
+  );
+
+  const selectedCafes = useMemo(() => {
+    if (!selectedCollection) return [];
+    return cafes.filter((c) => selectedCollection.cafeIds.includes(c.id));
+  }, [selectedCollection]);
 
   return (
     <MobileLayout>
@@ -16,55 +43,118 @@ export default function Favorites() {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <Heart className="text-primary fill-primary" />
-            <h1 className="text-xl font-heading font-bold">Bookmark Manager</h1>
+            <h1 className="text-xl font-heading font-bold">Koleksi Tersimpan</h1>
           </div>
-          <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
-             <span className="text-xs font-bold text-primary">2</span>
-          </div>
+          <Button size="icon" className="rounded-full h-12 w-12" onClick={() => setShowCreate(true)}>
+            <Plus />
+          </Button>
         </div>
 
-        {/* Search Bookmarks */}
-        <div className="relative">
-          <Search className="absolute left-3 top-3 text-muted-foreground" size={20} />
-          <div className="w-full h-12 pl-10 pr-4 rounded-2xl bg-white border border-border flex items-center text-muted-foreground cursor-text shadow-sm">
-            Search bookmark...
+        <div className="rounded-2xl border border-dashed border-border/70 bg-card/80 p-6 text-center space-y-3 shadow-sm">
+          <div className="flex justify-center">
+            <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
+              <FolderPlus className="text-primary" />
+            </div>
           </div>
+          <div>
+            <h2 className="text-lg font-bold">Koleksi</h2>
+            <p className="text-sm text-muted-foreground">
+              Kelompokkan kedai kopi favoritmu. Ketuk + untuk membuat koleksi baru.
+            </p>
+          </div>
+            <Button className="rounded-xl w-full" onClick={() => setShowCreate(true)}>
+            <Plus size={16} className="mr-2" /> Tambah koleksi
+          </Button>
         </div>
 
-        <p className="text-sm text-muted-foreground">Found 2 bookmarks</p>
-
-        <div className="space-y-4">
-          {favoriteCafes.map((cafe, index) => (
-            <motion.div 
-              key={cafe.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              onClick={() => setLocation(`/cafe/${cafe.id}`)}
-              className="bg-card rounded-2xl overflow-hidden shadow-sm border border-border/50 group cursor-pointer"
-            >
-              <div className="h-32 overflow-hidden relative">
-                <img src={cafe.images[0]} alt={cafe.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-4">
-                  <h3 className="text-white font-heading font-bold text-xl">{cafe.name}</h3>
-                </div>
+        {collections.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-muted-foreground">
+                {collections.length} koleksi • {totalSaved} tersimpan
               </div>
-              <div className="p-4 bg-white">
-                <div className="flex justify-between items-start text-xs text-muted-foreground mb-3">
-                  <div className="space-y-1">
-                     <div className="flex items-center gap-1"><MapPin size={12} /> {cafe.address}</div>
-                     <div className="flex items-center gap-1"><Star size={12} className="text-accent" fill="currentColor" /> {cafe.rating} ({cafe.reviewCount}) • {cafe.distance}</div>
+              <Button variant="ghost" size="sm" className="text-primary" onClick={() => setPickerOpen(true)}>
+                <Search size={16} className="mr-1" /> Telusuri
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {collections.map((col) => (
+                <motion.div
+                  key={col.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  onClick={() => setSelectedCollectionId(col.id)}
+                  className="rounded-2xl border border-border/70 bg-card p-4 shadow-sm cursor-pointer hover:border-primary/60"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="font-semibold">{col.name}</div>
+                    <div className="text-xs text-muted-foreground">{col.cafeIds.length} tersimpan</div>
                   </div>
-                  <div className="font-medium text-primary bg-secondary px-2 py-1 rounded-md">{cafe.openTime} - {cafe.closeTime}</div>
-                </div>
-                <div className="w-full h-10 rounded-xl border border-primary text-primary font-bold flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                  View Detail
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
+      <Dialog open={showCreate} onOpenChange={setShowCreate}>
+          <DialogContent className="rounded-2xl p-6">
+          <DialogHeader className="text-left">
+            <DialogTitle>Buat koleksi</DialogTitle>
+            <DialogDescription>Beri nama koleksi agar kamu bisa menyimpan kafe di dalamnya.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+              <Input
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              placeholder="mis. Kopi pagi"
+              className="rounded-xl"
+            />
+            <Button className="w-full rounded-xl" disabled={!newName.trim()} onClick={handleCreate}>
+              Simpan
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <CollectionPicker open={pickerOpen} onOpenChange={setPickerOpen} onSelect={() => setPickerOpen(false)} />
+
+      <Dialog open={Boolean(selectedCollection)} onOpenChange={(open) => !open && setSelectedCollectionId(null)}>
+        <DialogContent className="rounded-2xl p-6 max-w-md">
+            <DialogHeader className="text-left">
+            <DialogTitle>{selectedCollection?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedCollection?.cafeIds.length || 0} kafe dalam koleksi ini.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+            {selectedCafes.length === 0 ? (
+              <div className="text-sm text-muted-foreground text-center py-8">Belum ada kafe yang tersimpan.</div>
+            ) : (
+              selectedCafes.map((cafe) => (
+                <button
+                  key={cafe.id}
+                  onClick={() => setLocation(`/cafe/${cafe.id}`)}
+                  className="w-full text-left rounded-xl border border-border/70 bg-card p-3 shadow-sm hover:border-primary/60"
+                >
+                  <div className="flex items-center gap-3">
+                    <img src={cafe.images[0]} alt={cafe.name} className="w-14 h-14 rounded-lg object-cover" />
+                    <div className="flex-1">
+                      <div className="font-semibold">{cafe.name}</div>
+                      <div className="text-xs text-muted-foreground flex items-center gap-1">
+                        <MapPin size={12} /> {cafe.address}
+                      </div>
+                      <div className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Star size={12} className="text-accent" fill="currentColor" /> {cafe.rating} ({cafe.reviewCount})
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </MobileLayout>
   );
 }
