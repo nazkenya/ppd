@@ -53,11 +53,6 @@ export default function Home() {
               Selamat pagi!
             </h1>
           </div>
-          <Link href="/profile">
-             <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center overflow-hidden border-2 border-primary/20 cursor-pointer">
-               <User className="text-primary" />
-             </div>
-          </Link>
         </div>
 
         {/* Search */}
