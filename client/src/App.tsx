@@ -1,6 +1,5 @@
 import { Switch, Route, Redirect } from "wouter";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
+// removed QueryClientProvider (frontend-only)
 import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import Auth from "@/pages/Auth";
@@ -30,12 +29,12 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Toaster />
       <CollectionsProvider>
         <Router />
       </CollectionsProvider>
-    </QueryClientProvider>
+    </>
   );
 }
 
