@@ -80,10 +80,10 @@ export default function CafeDetail() {
           </div>
 
           {/* Cafe Info Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
+              <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
             <h1 className="text-3xl font-heading font-bold mb-1">{cafe.name}</h1>
             <div className="flex items-center gap-2 text-sm font-medium">
-              <span className="bg-green-500/90 px-2 py-0.5 rounded text-xs">OPEN</span>
+              <span className="bg-green-500/90 px-2 py-0.5 rounded text-xs">{cafe.isOpen ? 'BUKA' : 'TUTUP'}</span>
               <span className="flex items-center gap-1"><Star size={14} fill="currentColor" className="text-yellow-400" /> {cafe.rating} ({cafe.reviewCount})</span>
             </div>
           </div>

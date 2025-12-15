@@ -29,7 +29,7 @@ export default function Auth() {
           </div>
           <h1 className="text-4xl font-heading font-bold text-primary tracking-tight">FINCAFF</h1>
           <p className="text-muted-foreground mt-2 text-center">
-            {isLogin ? 'Welcome back! Please login to continue.' : 'Create an account to find your perfect brew.'}
+            {isLogin ? 'Selamat datang kembali! Silakan masuk untuk melanjutkan.' : 'Buat akun untuk menemukan kopi favoritmu.'}
           </p>
         </div>
 
@@ -46,26 +46,26 @@ export default function Auth() {
             >
               {!isLogin && (
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input id="name" placeholder="Enter your full name" className="rounded-xl h-12 bg-white/50 border-input" />
+                  <Label htmlFor="name">Nama Lengkap</Label>
+                  <Input id="name" placeholder="Masukkan nama lengkap" className="rounded-xl h-12 bg-white/50 border-input" />
                 </div>
               )}
               
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="name@email.com" className="rounded-xl h-12 bg-white/50 border-input" />
+                <Input id="email" type="email" placeholder="nama@contoh.com" className="rounded-xl h-12 bg-white/50 border-input" />
               </div>
 
               <div className="space-y-2 relative">
                 <div className="flex justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  {isLogin && <span className="text-xs text-primary font-medium">Forgot Password?</span>}
+                  <Label htmlFor="password">Kata sandi</Label>
+                  {isLogin && <span className="text-xs text-primary font-medium">Lupa kata sandi?</span>}
                 </div>
                 <div className="relative">
-                  <Input 
+                    <Input 
                     id="password" 
                     type={showPassword ? "text" : "password"} 
-                    placeholder="Enter password" 
+                    placeholder="Masukkan kata sandi" 
                     className="rounded-xl h-12 bg-white/50 border-input pr-10" 
                   />
                   <button 
@@ -80,12 +80,12 @@ export default function Auth() {
 
               {!isLogin && (
                 <div className="space-y-2 relative">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
+                  <Label htmlFor="confirm-password">Konfirmasi Kata sandi</Label>
                   <div className="relative">
                     <Input 
                       id="confirm-password" 
                       type={showPassword ? "text" : "password"} 
-                      placeholder="Repeat password" 
+                      placeholder="Ulangi kata sandi" 
                       className="rounded-xl h-12 bg-white/50 border-input pr-10" 
                     />
                   </div>
@@ -93,14 +93,14 @@ export default function Auth() {
               )}
 
               <Button type="submit" className="w-full h-12 text-lg rounded-xl mt-4 font-bold shadow-lg hover:shadow-xl transition-all">
-                {isLogin ? 'Login' : 'Create Account'}
+                {isLogin ? 'Masuk' : 'Buat Akun'}
               </Button>
             </motion.form>
           </AnimatePresence>
 
           <div className="relative flex py-2 items-center">
             <div className="flex-grow border-t border-muted"></div>
-            <span className="flex-shrink mx-4 text-muted-foreground text-sm">Or</span>
+            <span className="flex-shrink mx-4 text-muted-foreground text-sm">Atau</span>
             <div className="flex-grow border-t border-muted"></div>
           </div>
 
@@ -112,20 +112,20 @@ export default function Auth() {
                 <path d="M5.84 14.17c-.22-.66-.35-1.36-.35-2.17s.13-1.51.35-2.17V7.69H2.18C.94 9.47.25 10.66.25 12s.69 2.53 1.93 4.31l3.66-2.84z" fill="#FBBC05"/>
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.69l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
-               Continue with Google
+               Lanjutkan dengan Google
              </Button>
              <Button variant="outline" className="w-full h-12 rounded-xl border-muted-foreground/20 hover:bg-white text-muted-foreground font-medium">
                <svg className="mr-2 h-5 w-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                </svg>
-               Continue with Facebook
+               Lanjutkan dengan Facebook
              </Button>
           </div>
 
           <p className="text-center text-sm text-muted-foreground mt-8">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+            {isLogin ? 'Belum punya akun?' : 'Sudah punya akun?'}{" "}
             <button onClick={toggleMode} className="text-primary font-bold hover:underline">
-              {isLogin ? 'Register' : 'Login'}
+              {isLogin ? 'Daftar' : 'Masuk'}
             </button>
           </p>
         </div>
